@@ -23,41 +23,40 @@ export function ArticleLayout({
   children,
 }: ArticleLayoutProps) {
   return (
-    <main className="flex-1 bg-slate-950">
-      <article className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+    <main className="flex-1 bg-paper px-6">
+      <article className="mx-auto max-w-[920px] py-16 sm:py-24">
         <nav
           aria-label="Breadcrumb"
-          className="mb-10 flex items-center gap-2 text-sm text-slate-400"
+          className="mb-12 flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.09em] text-muted"
         >
-          <Link className="hover:text-cyan-400" href="/">
+          <Link className="hover:text-orange" href="/">
             Home
           </Link>
           <span aria-hidden="true">/</span>
-          <Link className="hover:text-cyan-400" href="/#articles">
-            Articles
+          <Link className="hover:text-orange" href="/#articles">
+            Field notes
           </Link>
           <span aria-hidden="true">/</span>
-          <span className="text-slate-300">{category}</span>
+          <span className="text-blue">{category}</span>
         </nav>
 
-        <header className="border-b border-slate-800 pb-10">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full bg-cyan-400/10 px-3 py-1 font-mono text-sm font-semibold text-cyan-400">
-              {category}
-            </span>
-            <span className="text-sm text-slate-500">{readingTime}</span>
+        <header className="border-b border-ink/20 pb-12">
+          <div className="flex flex-wrap items-center gap-4 font-mono text-[11px] font-bold uppercase tracking-[0.09em]">
+            <span className="text-blue">{category}</span>
+            <span className="text-orange">Build in progress</span>
+            <span className="text-muted">{readingTime}</span>
           </div>
 
-          <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h1 className="mt-7 max-w-4xl font-display text-[clamp(3.25rem,8vw,6.5rem)] font-normal leading-[0.9] tracking-[-0.055em]">
             {title}
           </h1>
 
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+          <p className="ml-auto mt-10 max-w-[650px] text-xl leading-8 text-muted">
             {description}
           </p>
         </header>
 
-        <div className="mt-12 space-y-14">{children}</div>
+        <div className="mt-14 space-y-16">{children}</div>
       </article>
     </main>
   );
@@ -70,8 +69,10 @@ export function ArticleSection({
 }: ArticleSectionProps) {
   return (
     <section id={id} className="scroll-mt-24">
-      <h2 className="text-2xl font-bold tracking-tight text-white">{title}</h2>
-      <div className="mt-5 space-y-5 leading-8 text-slate-300">
+      <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-normal leading-none tracking-[-0.04em]">
+        {title}
+      </h2>
+      <div className="mt-6 space-y-5 text-[1.05rem] leading-8 text-muted">
         {children}
       </div>
     </section>
@@ -80,7 +81,7 @@ export function ArticleSection({
 
 export function ArticleNote({ children }: { children: ReactNode }) {
   return (
-    <aside className="rounded-xl border border-cyan-400/30 bg-cyan-400/5 p-6 text-slate-200">
+    <aside className="border-l-4 border-orange bg-[#e9e5db] p-6 text-ink">
       {children}
     </aside>
   );

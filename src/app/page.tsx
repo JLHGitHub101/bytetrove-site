@@ -2,188 +2,178 @@ import Link from "next/link";
 
 const topics = [
   {
-    shortName: "AWS",
-    title: "AWS Cloud",
+    number: "01",
+    title: "AWS Architecture",
     description:
-      "Build secure, practical AWS environments while understanding every configuration decision.",
+      "Console-first cloud builds that explain the service, the configuration, and the reason behind each decision.",
   },
   {
-    shortName: "NET",
-    title: "Networking",
+    number: "02",
+    title: "Network Engineering",
     description:
-      "Explore routing, switching, DNS, segmentation, and hybrid-cloud connectivity.",
+      "Practical routing, switching, DNS, segmentation, and hybrid connectivity documented from the packet level up.",
   },
   {
-    shortName: "IaC",
+    number: "03",
     title: "Infrastructure as Code",
     description:
-      "Turn manually validated infrastructure into repeatable Terraform deployments.",
+      "Validated environments translated into maintainable Terraform modules and repeatable delivery workflows.",
   },
   {
-    shortName: "LAB",
-    title: "Homelab",
+    number: "04",
+    title: "Homelab Builds",
     description:
-      "Design and operate realistic environments using virtualization, storage, and automation.",
+      "Hands-on virtualization, storage, Windows services, automation, and observability in a working lab.",
   },
 ];
 
 const featuredArticles = [
   {
-    category: "AWS",
+    category: "AWS / DELIVERY",
+    number: "FIELD NOTE 001",
     title: "Hosting a Static Next.js Site on AWS",
     description:
-      "Learn how Next.js static export, Amazon S3, CloudFront, ACM, and Route 53 work together.",
+      "Follow the path from a local static export to S3, CloudFront, ACM, Route 53, and an automated deployment pipeline.",
     href: "/articles/hosting-nextjs-on-aws/",
-    status: "In progress",
+    status: "BUILD IN PROGRESS",
   },
 ];
 
 export default function Home() {
   return (
-    <main>
-      <section className="border-b border-slate-800 bg-slate-950">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-[1.4fr_0.6fr] lg:items-center lg:py-32">
-          <div>
-            <p className="mb-5 font-mono text-sm font-semibold uppercase tracking-[0.2em] text-cyan-400">
-              Learn by building
-            </p>
+    <main className="bg-paper px-6">
+      <div className="mx-auto max-w-[1180px]">
+        <section className="border-b border-ink/20 pb-20 pt-[clamp(4.75rem,11vw,9.375rem)]">
+          <p className="mb-8 font-mono text-xs font-bold uppercase tracking-[0.16em] text-blue">
+            01 &nbsp; Building in public
+          </p>
 
-            <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Practical technology knowledge, collected one build at a time.
-            </h1>
+          <h1 className="max-w-[970px] font-display text-[clamp(3.6rem,10vw,8.25rem)] font-normal leading-[0.84] tracking-[-0.065em] text-ink">
+            Learn it. Build it.
+            <br />
+            <em className="font-normal text-orange">Document it.</em>
+          </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              ByteTrove documents real cloud, networking, automation, and
-              infrastructure projects—from the first console configuration to
-              production-ready code.
-            </p>
+          <p className="ml-auto mt-11 max-w-[650px] text-[clamp(1.125rem,2.2vw,1.55rem)] leading-[1.55] text-muted">
+            A field journal for practical cloud architecture, network
+            engineering, and the labs that turn theory into working systems.
+          </p>
 
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link
-                href="#articles"
-                className="rounded-lg bg-cyan-400 px-6 py-3 text-center font-semibold text-slate-950 transition hover:bg-cyan-300"
+          <div className="mt-14 flex flex-wrap gap-2.5">
+            {topics.slice(0, 3).map((topic) => (
+              <span
+                key={topic.number}
+                className="border border-ink px-3 py-2 font-mono text-[11px] uppercase tracking-[0.07em]"
               >
-                Explore articles
-              </Link>
-
-              <Link
-                href="#topics"
-                className="rounded-lg border border-slate-700 px-6 py-3 text-center font-semibold text-white transition hover:border-cyan-400 hover:text-cyan-400"
-              >
-                Browse topics
-              </Link>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl shadow-cyan-950/20">
-            <div className="mb-5 flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-red-400" />
-              <span className="h-3 w-3 rounded-full bg-amber-400" />
-              <span className="h-3 w-3 rounded-full bg-emerald-400" />
-            </div>
-
-            <pre className="overflow-x-auto font-mono text-sm leading-7">
-              <code>
-                <span className="text-slate-500">$</span>{" "}
-                <span className="text-cyan-300">build</span>{" "}
-                <span className="text-white">bytetrove</span>
-                {"\n"}
-                <span className="text-slate-500">→</span>{" "}
-                <span className="text-slate-300">learn the architecture</span>
-                {"\n"}
-                <span className="text-slate-500">→</span>{" "}
-                <span className="text-slate-300">validate the deployment</span>
-                {"\n"}
-                <span className="text-slate-500">→</span>{" "}
-                <span className="text-slate-300">automate the result</span>
-                {"\n"}
-                <span className="text-emerald-400">✓ knowledge captured</span>
-              </code>
-            </pre>
-          </div>
-        </div>
-      </section>
-
-      <section id="topics" className="bg-slate-900/50 py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="max-w-2xl">
-            <p className="font-mono text-sm font-semibold uppercase tracking-[0.2em] text-cyan-400">
-              Topics
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
-              Follow the complete technology journey
-            </h2>
-            <p className="mt-4 leading-7 text-slate-400">
-              Each topic connects architecture, implementation, validation,
-              troubleshooting, and automation.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {topics.map((topic) => (
-              <article
-                key={topic.title}
-                className="rounded-xl border border-slate-800 bg-slate-950 p-6 transition hover:-translate-y-1 hover:border-cyan-500/60"
-              >
-                <div className="mb-5 inline-flex rounded-md bg-cyan-400/10 px-3 py-2 font-mono text-sm font-bold text-cyan-400">
-                  {topic.shortName}
-                </div>
-                <h3 className="text-xl font-semibold text-white">
-                  {topic.title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-slate-400">
-                  {topic.description}
-                </p>
-              </article>
+                {topic.title}
+              </span>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="articles" className="bg-slate-950 py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="max-w-2xl">
-            <p className="font-mono text-sm font-semibold uppercase tracking-[0.2em] text-cyan-400">
-              Featured articles
+        <section className="grid items-center gap-10 py-20 md:grid-cols-[1fr_1.15fr] md:gap-16">
+          <div>
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.13em] text-blue">
+              Current status
             </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
-              Current builds and walkthroughs
+            <h2 className="mt-5 max-w-lg font-display text-[clamp(2.4rem,5vw,3.65rem)] font-normal leading-none tracking-[-0.045em]">
+              The first packet arrived.
             </h2>
+            <p className="mt-6 max-w-md leading-7 text-muted">
+              The site structure is live in source control. Next comes the
+              delivery system that validates, packages, and deploys every
+              change.
+            </p>
           </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 bg-ink p-8 font-mono text-sm text-[#dce7ed] [box-shadow:12px_12px_0_#f06424]">
+            <code>$ npm run build</code>
+            <code className="text-[#70d6a8]">
+              200 OK — static export generated
+            </code>
+          </div>
+        </section>
+
+        <section id="topics" className="border-t border-ink/20 py-20">
+          <div className="grid gap-8 md:grid-cols-[0.7fr_1.3fr]">
+            <div>
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.13em] text-blue">
+                02 &nbsp; Topics
+              </p>
+              <h2 className="mt-5 font-display text-5xl font-normal leading-none tracking-[-0.045em]">
+                Working systems,
+                <br />
+                carefully recorded.
+              </h2>
+            </div>
+
+            <div className="border-t border-ink/20">
+              {topics.map((topic) => (
+                <article
+                  key={topic.number}
+                  className="grid gap-4 border-b border-ink/20 py-7 sm:grid-cols-[3rem_1fr]"
+                >
+                  <span className="font-mono text-xs font-bold text-orange">
+                    {topic.number}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-2xl">{topic.title}</h3>
+                    <p className="mt-2 max-w-2xl leading-7 text-muted">
+                      {topic.description}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="articles" className="border-t border-ink/20 py-20">
+          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+            <div>
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.13em] text-blue">
+                03 &nbsp; Field notes
+              </p>
+              <h2 className="mt-5 font-display text-5xl font-normal leading-none tracking-[-0.045em]">
+                Latest from the build.
+              </h2>
+            </div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.09em] text-muted">
+              One system at a time
+            </p>
+          </div>
+
+          <div className="mt-12 border-y border-ink/20">
             {featuredArticles.map((article) => (
               <article
                 key={article.href}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-7"
+                className="grid gap-8 py-10 md:grid-cols-[0.55fr_1.45fr]"
               >
-                <div className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-sm font-semibold text-cyan-400">
-                    {article.category}
-                  </span>
-                  <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs text-amber-300">
-                    {article.status}
-                  </span>
+                <div className="font-mono text-[11px] uppercase tracking-[0.09em]">
+                  <p className="font-bold text-blue">{article.number}</p>
+                  <p className="mt-2 text-muted">{article.category}</p>
+                  <p className="mt-2 text-orange">{article.status}</p>
                 </div>
 
-                <h3 className="mt-5 text-2xl font-semibold text-white">
-                  {article.title}
-                </h3>
-                <p className="mt-3 leading-7 text-slate-400">
-                  {article.description}
-                </p>
-
-                <Link
-                  href={article.href}
-                  className="mt-6 inline-flex font-semibold text-cyan-400 hover:text-cyan-300"
-                >
-                  Read the walkthrough →
-                </Link>
+                <div>
+                  <h3 className="max-w-2xl font-display text-4xl leading-none tracking-[-0.035em]">
+                    {article.title}
+                  </h3>
+                  <p className="mt-5 max-w-2xl leading-7 text-muted">
+                    {article.description}
+                  </p>
+                  <Link
+                    href={article.href}
+                    className="mt-7 inline-flex border-b border-ink pb-1 font-mono text-xs font-bold uppercase tracking-[0.08em] hover:border-orange hover:text-orange"
+                  >
+                    Read field note &nbsp;→
+                  </Link>
+                </div>
               </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
