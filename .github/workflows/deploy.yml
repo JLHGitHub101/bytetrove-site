@@ -49,7 +49,18 @@ jobs:
         run: |
           test -f out/index.html
           test -f out/404.html
-          test -f out/articles/hosting-nextjs-on-aws/index.html
+
+          mapfile -t pages < <(
+            find out -type f -name "index.html" \
+              ! -path "out/404/*" \
+              ! -path "out/_not-found/*" \
+              ! -path "out/_next/*" \
+              | sort
+          )
+
+          test "${#pages[@]}" -gt 0
+          echo "Discovered ${#pages[@]} deployable page(s)."
+          printf "  %s\n" "${pages[@]}"
 
       - name: Archive deployment artifact
         uses: actions/upload-artifact@v7
@@ -97,17 +108,77 @@ jobs:
             --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
             --id "$invalidation_id"
 
-      - name: Smoke test production
+      - name: Verify every exported page in production
+        id: smoke
         run: |
-          curl --fail --location --silent --show-error \
-            --retry 5 --retry-delay 5 --retry-all-errors \
-            "$SITE_URL/" | grep --quiet "ByteTrove"
+          set -uo pipefail
 
-          curl --fail --location --silent --show-error \
-            --retry 5 --retry-delay 5 --retry-all-errors \
-            "$SITE_URL/articles/hosting-nextjs-on-aws/" | grep --quiet "Hosting Next.js on AWS"
+          temp_dir=$(mktemp -d)
+          trap 'rm -rf "$temp_dir"' EXIT
+
+          mapfile -t pages < <(
+            find out -type f -name "index.html" \
+              ! -path "out/404/*" \
+              ! -path "out/_not-found/*" \
+              ! -path "out/_next/*" \
+              | sort
+          )
+
+          if [[ "${#pages[@]}" -eq 0 ]]; then
+            echo "::error::No exported pages were discovered."
+            exit 1
+          fi
+
+          failed=0
+
+          for source_file in "${pages[@]}"; do
+            relative_path="${source_file#out/}"
+            route="/${relative_path%index.html}"
+            response_file="$temp_dir/response.html"
+            url="${SITE_URL}${route}?deployment-check=${GITHUB_SHA}"
+            http_code="000"
+
+            for attempt in {1..6}; do
+              http_code=$(curl \
+                --location \
+                --silent \
+                --show-error \
+                --connect-timeout 10 \
+                --max-time 30 \
+                --output "$response_file" \
+                --write-out "%{http_code}" \
+                --header "Cache-Control: no-cache" \
+                "$url") || http_code="curl-error"
+
+              if [[ "$http_code" == "200" ]] &&
+                 cmp --silent "$source_file" "$response_file"; then
+                echo "PASS $route returned HTTP 200 with the expected artifact."
+                break
+              fi
+
+              if [[ "$attempt" -lt 6 ]]; then
+                echo "Retry $attempt/6 for $route: HTTP $http_code or content mismatch."
+                sleep 10
+              fi
+            done
+
+            if [[ "$http_code" != "200" ]] ||
+               ! cmp --silent "$source_file" "$response_file"; then
+              echo "::error title=Production page verification failed::$route returned HTTP $http_code or did not match the deployed artifact."
+
+              if [[ "$http_code" == "200" ]]; then
+                echo "Expected and received SHA-256 values:"
+                sha256sum "$source_file" "$response_file"
+              fi
+
+              failed=1
+            fi
+          done
+
+          exit "$failed"
 
       - name: Write deployment summary
+        if: always()
         run: |
           {
             echo "## ByteTrove production deployment"
@@ -116,5 +187,6 @@ jobs:
             echo "- Environment: \`production\`"
             echo "- S3 bucket: \`$S3_BUCKET\`"
             echo "- CloudFront invalidation: \`${{ steps.invalidate.outputs.id }}\`"
+            echo "- Page verification: \`${{ steps.smoke.outcome }}\`"
             echo "- Site: $SITE_URL"
           } >> "$GITHUB_STEP_SUMMARY"
