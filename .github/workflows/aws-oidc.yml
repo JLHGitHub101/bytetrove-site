@@ -1,0 +1,28 @@
+name: Verify AWS OIDC
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  verify-aws-identity:
+    name: Verify AWS deployment identity
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 5
+
+    steps:
+      - name: Assume ByteTrove deployment role
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::720546261328:role/ByteTroveGitHubDeployRole
+          aws-region: us-west-2
+          role-session-name: bytetrove-${{ github.run_id }}
+          role-duration-seconds: 900
+          allowed-account-ids: "720546261328"
+
+      - name: Verify caller identity
+        run: aws sts get-caller-identity
